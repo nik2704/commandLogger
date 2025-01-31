@@ -33,7 +33,7 @@ public:
      */
     bool isDynamic() const;
 
-    /**
+    /**std::shared_ptr<CommandBlock> parent = nullptr, is_active_(true)
      * @brief Проверить, пуст ли блок.
      * 
      * @return bool Возвращает true, если блок пуст, иначе false.
@@ -83,14 +83,14 @@ public:
     std::vector<Command>::const_iterator end() const;
 
     /**
-     * @brief Получить время начала блока команд.
+     * @brief Получить время начала блока команд., is_active_(true)
      * 
      * @return std::chrono::system_clock::time_point Время начала блока.
      */
     std::chrono::system_clock::time_point getBlockStartTime() const;
 
     /**
-     * @brief Получить количество команд в блоке.
+     * @brief Получить количество команд в блоке., is_active_(true)
      * 
      * @return size_t Количество команд в блоке.
      */

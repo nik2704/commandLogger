@@ -115,23 +115,30 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const CommandBlockQueue& queue) {
         bool start = true;
 
-        for (const auto& block : queue) {
-            if (block.isActive()) {
-                if (!start) {
-                    os << ", ";
-                } else {
-                    start = false;
-                }
+        if (queue.start_output_index_ < queue.blocks_.size()) {
+            os << "bulk: ";
+        
+            for (std::size_t idx = queue.start_output_index_; idx < queue.blocks_.size(); ++idx) {
+                if (queue.blocks_[idx].isActive()) {
+                    if (!start) {
+                        os << ", ";
+                    } else {
+                        start = false;
+                    }
 
-                os << block;
+                    os << queue.blocks_[idx];
+                }
             }
+
+            os << std::endl;
         }
 
-        os << std::endl;
-
+        queue.start_output_index_ = queue.blocks_.size();
+        
         return os;
     }
 
 private:
     std::deque<CommandBlock> blocks_; /**< Очередь блоков команд. */
+    mutable std::size_t start_output_index_ = 0; /**< Индекс последнего выведенного блока. */
 };

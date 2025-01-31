@@ -42,4 +42,5 @@ private:
     size_t currentBlockIndex_; /**< Индекс текущего блока команд. */
     size_t step_; /**< Шаг для отслеживания выполнения команд. */
     CommandManager commandManager_; /**< Менеджер команд для обработки и логирования команд. */
+    size_t level_;
 };

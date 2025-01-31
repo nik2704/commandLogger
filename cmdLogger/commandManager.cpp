@@ -30,6 +30,7 @@ void CommandManager::logPreviosStaticBlock(size_t blockIndex) {
 }
 
 IndexInfo CommandManager::addCommandToBlock(size_t blockIndex, const std::string& command_text, bool isDynamic) {
+
     Command command(command_text);
     IndexInfo result{blockIndex, 0};
 
@@ -43,6 +44,7 @@ IndexInfo CommandManager::addCommandToBlock(size_t blockIndex, const std::string
 
         result.commandIndex = commandBlock.AddCommand(command);
         result.blockIndex = commandQueue_.addBlock(commandBlock);
+
         return result;
     }
 
@@ -55,7 +57,7 @@ IndexInfo CommandManager::addCommandToBlock(size_t blockIndex, const std::string
 }
 
 void CommandManager::logCommandQueue() {
-    std::cout << "bulk: " << commandQueue_ << std::endl;
+    std::cout << commandQueue_;
 }
 
 bool CommandManager::isBlockEmpty(size_t blockIndex) const {

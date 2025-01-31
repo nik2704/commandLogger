@@ -45,7 +45,7 @@ std::vector<Command>::const_iterator CommandBlock::begin() const {
 }
 
 std::vector<Command>::const_iterator CommandBlock::end() const {
-    return commands_.end();
+    return commands_.cend();
 }
 
 std::chrono::system_clock::time_point CommandBlock::getBlockStartTime() const {
@@ -71,6 +71,4 @@ void CommandBlock::saveToFile() const {
     for (const auto& command : commands_) {
         file << command << std::endl;
     }
-
-    file.close();
 }
