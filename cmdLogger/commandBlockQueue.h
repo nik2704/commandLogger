@@ -131,9 +131,9 @@ public:
             }
 
             os << std::endl;
-        }
 
-        queue.start_output_index_ = queue.blocks_.size();
+            queue.start_output_index_ = queue.blocks_.size();
+        }
         
         return os;
     }
