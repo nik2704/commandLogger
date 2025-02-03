@@ -54,7 +54,7 @@ public:
      * 
      * @param index Индекс блока команд для деактивации.
      */
-    void deactivateDynamicBlockAtIndex(std::size_t index);
+    void deactivateBlock(std::size_t index);
 
     /**
      * @brief Проверить, пуста ли очередь блоков.
@@ -70,6 +70,12 @@ public:
      */
     std::size_t Size() const;
 
+    /**
+     * @brief Получить количество активных блоков в очереди.
+     * 
+     * @return std::size_t Количество активных блоков в очереди.
+     */
+    std::size_t getActiveBlockCount() const;
     /**
      * @brief Получить индекс последнего блока в очереди.
      * 
@@ -105,6 +111,7 @@ public:
      */
     const_iterator end() const;
 
+    // std::size_t getStartOutputIndex() const;
     /**
      * @brief Перегрузка оператора вывода для очереди блоков.
      * 
@@ -115,30 +122,22 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const CommandBlockQueue& queue) {
         bool start = true;
 
-        if (queue.start_output_index_ < queue.blocks_.size()) {
-            os << "bulk: ";
-        
-            for (std::size_t idx = queue.start_output_index_; idx < queue.blocks_.size(); ++idx) {
-                if (queue.blocks_[idx].isActive()) {
-                    if (!start) {
-                        os << ", ";
-                    } else {
-                        start = false;
-                    }
-
-                    os << queue.blocks_[idx];
-                }
+        for (auto it = queue.begin(); it < queue.end(); ++it) {
+            if (!start) {
+                os << ", ";
+            } else {
+                start = false;
             }
 
-            os << std::endl;
-
-            queue.start_output_index_ = queue.blocks_.size();
+            os << (*it);
         }
+
+        os << std::endl;
         
         return os;
     }
 
 private:
     std::deque<CommandBlock> blocks_; /**< Очередь блоков команд. */
-    mutable std::size_t start_output_index_ = 0; /**< Индекс последнего выведенного блока. */
+    // mutable std::size_t start_output_index_ = 0; /**< Индекс последнего выведенного блока. */
 };

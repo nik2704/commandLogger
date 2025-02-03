@@ -13,7 +13,9 @@ CommandReader::CommandReader(size_t block_size) : block_size_(block_size), curre
 void CommandReader::execute() {
     while (true) {
         for (size_t i = 0; i < block_size_; ++i) {
-            readCommand(false, i == 0);
+            if (!readCommand(false, i == 0)) {
+                break;
+            }
         }
         
         commandManager_.logCommandQueue();
@@ -23,8 +25,17 @@ void CommandReader::execute() {
 bool CommandReader::readCommand(bool isDynamic, bool startIteration) {
     std::string line;
 
-    if (!std::getline(std::cin, line)) {
-        commandManager_.deactivateDynamicBlock(currentBlockIndex_);
+    if (!std::getline(std::cin, line) || line.empty()) {
+        if (isDynamic) {
+            commandManager_.deactivateBlock(currentBlockIndex_);
+
+            if (level_ > 0) {
+                --level_;
+            }
+        }
+
+        currentBlockIndex_ = commandManager_.getNewBlockIndex();
+
         return false;
     }
 

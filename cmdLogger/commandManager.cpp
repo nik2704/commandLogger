@@ -10,8 +10,8 @@ size_t CommandManager::getNewBlockIndex() {
     return commandQueue_.Size();
 }
 
-void CommandManager::deactivateDynamicBlock(size_t blockIndex) {
-    commandQueue_.deactivateDynamicBlockAtIndex(blockIndex);
+void CommandManager::deactivateBlock(size_t blockIndex) {
+    commandQueue_.deactivateBlock(blockIndex);
 }
 
 void CommandManager::logPreviosStaticBlock(size_t blockIndex) {
@@ -57,7 +57,24 @@ IndexInfo CommandManager::addCommandToBlock(size_t blockIndex, const std::string
 }
 
 void CommandManager::logCommandQueue() {
-    std::cout << commandQueue_;
+    if (commandQueue_.getActiveBlockCount() > 0) {
+        bool start = true;
+        std::cout << "bulk: ";
+
+        for (auto it = commandQueue_.begin(); it != commandQueue_.end(); ++it) {
+            if (it->isActive()) {
+                if (!start) {
+                    std::cout << ", ";
+                }
+
+                std::cout << (*it);
+                it->deactivate();
+                start = false;
+            }
+        }
+
+        std::cout << std::endl;
+    }
 }
 
 bool CommandManager::isBlockEmpty(size_t blockIndex) const {

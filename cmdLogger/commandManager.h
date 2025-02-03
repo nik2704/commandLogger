@@ -27,11 +27,11 @@ public:
     size_t getNewBlockIndex();
 
     /**
-     * @brief Деактивировать динамический блок команд.
+     * @brief Деактивировать блок команд.
      * 
      * @param blockIndex Индекс блока для деактивации.
      */
-    void deactivateDynamicBlock(size_t blockIndex);
+    void deactivateBlock(size_t blockIndex);
 
     /**
      * @brief Логировать предыдущий статический блок.

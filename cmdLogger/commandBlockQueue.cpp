@@ -32,11 +32,9 @@ void CommandBlockQueue::deleteBlockByIndex(std::size_t index) {
     }
 }
 
-void CommandBlockQueue::deactivateDynamicBlockAtIndex(std::size_t index) {
+void CommandBlockQueue::deactivateBlock(std::size_t index) {
     if (index < blocks_.size()) {
-        if (blocks_[index].isDynamic()) {
-            blocks_[index].deactivate();
-        }
+        blocks_[index].deactivate();
     }
 }
 
@@ -46,6 +44,20 @@ bool CommandBlockQueue::isEmpty() const {
 
 std::size_t CommandBlockQueue::Size() const {
     return blocks_.size();
+}
+
+std::size_t CommandBlockQueue::getActiveBlockCount() const  {
+    std::size_t res = 0;
+
+    if (begin() < end()) {
+        for (auto it = begin(); it < end(); ++it ) {
+            if ((*it).isActive()) {
+                ++res;
+            }
+        }
+    }
+
+    return res;
 }
 
 std::size_t CommandBlockQueue::getLasBlocktIndex() const {
@@ -67,3 +79,7 @@ CommandBlockQueue::const_iterator CommandBlockQueue::begin() const {
 CommandBlockQueue::const_iterator CommandBlockQueue::end() const {
     return blocks_.end();
 }
+
+//  std::size_t CommandBlockQueue::getStartOutputIndex() const {
+//     return start_output_index_;
+//  }
