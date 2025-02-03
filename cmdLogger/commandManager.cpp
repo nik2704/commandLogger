@@ -21,7 +21,7 @@ void CommandManager::logPreviosStaticBlock(size_t blockIndex) {
 
         if (block_opt.has_value()) {
             auto& block = block_opt->get();
-            if (!block.isDynamic()) {
+            if (!block.isDynamic() && block.isActive()) {
                 std::cout << "bulk: " << block << std::endl;
                 block.deactivate();
             }

@@ -59,11 +59,15 @@ bool CommandReader::readCommand(bool isDynamic, bool startIteration) {
         currentBlockIndex_ = commandManager_.getNewBlockIndex();
         commandManager_.logPreviosStaticBlock(currentBlockIndex_);
 
-        while (readCommand(true, startIteration)) {}
+        while (readCommand(true, startIteration)) {
+            startIteration = false;
+        }
     } else {
         if (startIteration) {
             currentBlockIndex_ = commandManager_.getNewBlockIndex();
         }
+
+        // std::cout << "currentBlockIndex_=" << currentBlockIndex_ << ", isDynamic=" << isDynamic << std::endl;
 
         commandManager_.addCommandToBlock(currentBlockIndex_, line, isDynamic);
     }
