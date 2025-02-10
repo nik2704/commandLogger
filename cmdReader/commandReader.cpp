@@ -13,7 +13,7 @@ CommandReader::CommandReader(size_t block_size) : block_size_(block_size), curre
 void CommandReader::execute() {
     while (true) {
         for (size_t i = 0; i < block_size_; ++i) {
-            if (!readCommand(false, i == 0)) {
+            if (!readCommand(false, i % block_size_ == 0)) {
                 break;
             }
         }
@@ -26,25 +26,16 @@ bool CommandReader::readCommand(bool isDynamic, bool startIteration) {
     std::string line;
 
     if (!std::getline(std::cin, line) || line.empty()) {
-        if (isDynamic) {
-            commandManager_.deactivateBlock(currentBlockIndex_);
-
-            if (level_ > 0) {
-                --level_;
-            }
-        }
-
-        currentBlockIndex_ = commandManager_.getNewBlockIndex();
-
+        commandManager_.logPreviosStaticBlock(currentBlockIndex_);
         return false;
     }
 
-    if (line == "}") {
-        if (level_ > 0) {
-            --level_;
-        }
-
+    if (line == "{" || line == "}" || startIteration) {
         currentBlockIndex_ = commandManager_.getNewBlockIndex();
+    }
+
+    if (line == "}") {
+        --level_;
 
         if (level_ == 0) {
             commandManager_.logCommandQueue();
@@ -55,22 +46,16 @@ bool CommandReader::readCommand(bool isDynamic, bool startIteration) {
 
     if (line == "{") {
         ++level_;
-        
-        currentBlockIndex_ = commandManager_.getNewBlockIndex();
+
         commandManager_.logPreviosStaticBlock(currentBlockIndex_);
 
         while (readCommand(true, startIteration)) {
             startIteration = false;
         }
     } else {
-        if (startIteration) {
-            currentBlockIndex_ = commandManager_.getNewBlockIndex();
-        }
-
-        // std::cout << "currentBlockIndex_=" << currentBlockIndex_ << ", isDynamic=" << isDynamic << std::endl;
-
         commandManager_.addCommandToBlock(currentBlockIndex_, line, isDynamic);
-    }
+    } 
+
 
     return true;
 }

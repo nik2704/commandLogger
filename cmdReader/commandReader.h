@@ -39,6 +39,7 @@ private:
      */
     bool readCommand(bool isDynamic, bool startIteration);
 
+
     size_t block_size_; /**< Размер блока команд. */
     size_t currentBlockIndex_; /**< Индекс текущего блока команд. */
     CommandManager commandManager_; /**< Менеджер команд для обработки и логирования команд. */
